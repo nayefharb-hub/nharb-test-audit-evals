@@ -1,0 +1,17 @@
+{
+  "name": "roombook",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Meeting room booking API",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "jest"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "jest": "29.7.0"
+  }
+}
