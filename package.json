@@ -6,7 +6,10 @@
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
-    "test": "jest"
+    "test": "node scripts/run-tests.js",
+    "test:plan": "node scripts/run-tests.js --plan",
+    "lists:check": "node scripts/check-lists.js",
+    "durations:update": "node scripts/update-durations.js"
   },
   "engines": {
     "node": ">=20"

@@ -1,0 +1,71 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'tests/**/*.test.js'
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'tests/**/*.test.js'
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lists:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node scripts/check-lists.js
+
+  test:
+    needs: lists
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { group: unit, shard: 1/2 }
+          - { group: unit, shard: 2/2 }
+          - { group: api, shard: 1/2 }
+          - { group: api, shard: 2/2 }
+          - { group: external, shard: 1/1 }
+    env:
+      LIVE_TESTS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: node scripts/run-tests.js --group ${{ matrix.group }} --shard ${{ matrix.shard }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reports-${{ matrix.group }}-${{ strategy.job-index }}
+          path: reports/
+          if-no-files-found: ignore
+
+  verdict:
+    needs: test
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: reports-*
+          path: reports
+          merge-multiple: true
+      - run: node scripts/verdict.js reports

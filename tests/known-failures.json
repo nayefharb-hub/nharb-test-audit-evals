@@ -1,0 +1,14 @@
+[
+  {
+    "test": "tests/unit/bookings.test.js › createBooking › allows a booking that starts when another ends",
+    "ticket": "BK-112",
+    "reason": "Back-to-back bookings are rejected as overlapping: the overlap check compares the end boundary with <=.",
+    "added": "2026-09-15"
+  },
+  {
+    "test": "tests/api/bookings.test.js › PATCH /bookings/:id › rejects a reschedule longer than four hours",
+    "ticket": "BK-138",
+    "reason": "rescheduleBooking does not apply the four hour maximum that createBooking enforces, so PATCH accepts a six hour booking.",
+    "added": "2026-09-15"
+  }
+]
