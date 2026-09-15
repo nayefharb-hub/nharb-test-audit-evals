@@ -39,6 +39,9 @@ pytest
 5. **Rescheduling** replaces the pending reminders with ones planned from the
    new start. Reminders that have already gone out are kept for the record.
 6. **Cancelling** drops every pending reminder for that appointment.
+7. **Monthly series** keep the original day of the month. An appointment on
+   the 31st falls on the last day of shorter months and goes back to the 31st
+   when the month allows it.
 
 ### Worked example
 

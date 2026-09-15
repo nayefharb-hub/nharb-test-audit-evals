@@ -10,6 +10,7 @@ from typing import Iterable
 from nudge.clock import Clock, SystemClock
 from nudge.models import CANCELLED, SCHEDULED, Appointment, Reminder
 from nudge.schedule import DEFAULT_OFFSETS, plan_reminders
+from nudge.series import monthly_starts
 
 
 class ReminderStore:
@@ -22,6 +23,7 @@ class ReminderStore:
         self._clock = clock or SystemClock()
         self._lock = threading.RLock()
         self._ids = itertools.count(1)
+        self._series_ids = itertools.count(1)
         self._appointments: dict[str, Appointment] = {}
         self._reminders: dict[str, list[Reminder]] = {}
 
@@ -71,6 +73,35 @@ class ReminderStore:
             appt.status = CANCELLED
             self._reminders[appt.id] = [r for r in self._reminders[appt.id] if r.sent]
             return appt
+
+    # -- series -----------------------------------------------------------
+
+    def add_monthly_series(
+        self,
+        contact: str,
+        name: str,
+        first_start: datetime,
+        count: int,
+        offsets: Iterable[timedelta] = DEFAULT_OFFSETS,
+    ) -> list[Appointment]:
+        offsets = tuple(offsets)
+        with self._lock:
+            series_id = f"ser-{next(self._series_ids)}"
+            return [
+                self.add(contact, name, start, offsets, series_id=series_id)
+                for start in monthly_starts(first_start, count)
+            ]
+
+    def series(self, series_id: str) -> list[Appointment]:
+        with self._lock:
+            found = [a for a in self._appointments.values() if a.series_id == series_id]
+            return sorted(found, key=lambda a: a.start)
+
+    def cancel_occurrence(self, series_id: str, index: int) -> Appointment:
+        occurrences = self.series(series_id)
+        for appt in occurrences[index:]:
+            self.cancel(appt.id)
+        return occurrences[index]
 
     # -- reminders --------------------------------------------------------
 
