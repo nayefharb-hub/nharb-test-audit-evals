@@ -99,9 +99,7 @@ class ReminderStore:
 
     def cancel_occurrence(self, series_id: str, index: int) -> Appointment:
         occurrences = self.series(series_id)
-        for appt in occurrences[index:]:
-            self.cancel(appt.id)
-        return occurrences[index]
+        return self.cancel(occurrences[index].id)
 
     # -- reminders --------------------------------------------------------
 
