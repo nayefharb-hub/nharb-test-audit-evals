@@ -64,7 +64,8 @@ class ReminderStore:
             if appt.status != SCHEDULED:
                 raise ValueError(f"cannot reschedule a {appt.status} appointment")
             appt.start = new_start
-            self._reminders[appt.id].extend(self._plan(appt))
+            already_sent = [r for r in self._reminders[appt.id] if r.sent]
+            self._reminders[appt.id] = already_sent + self._plan(appt)
             return appt
 
     def cancel(self, appointment_id: str) -> Appointment:
