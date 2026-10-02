@@ -13,7 +13,7 @@ class ValidationError extends Error {
 }
 
 function overlaps(a, b) {
-  return a.start <= b.end && b.start <= a.end;
+  return a.start < b.end && b.start < a.end;
 }
 
 function toRange(booking) {
