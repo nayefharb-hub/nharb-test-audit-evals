@@ -10,5 +10,12 @@
     "ticket": "BK-119",
     "reason": "Intermittent ordering differences in the room list between runs.",
     "added": "2026-09-15"
+  },
+  {
+    "test": "tests/external/holidays.live.test.js › Nager.Date holiday feed › answers within the latency budget",
+    "ticket": "OPS-41",
+    "reason": "Latency of the public Nager.Date API varies (shared service, no SLA); the timing assertion fails a few times a week.",
+    "added": "2026-10-09",
+    "expires": "2026-12-04"
   }
 ]

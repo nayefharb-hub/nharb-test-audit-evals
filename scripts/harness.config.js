@@ -10,8 +10,11 @@ module.exports = {
   defaultGroups: ['unit', 'api', 'external'],
 
   knownFailuresFile: 'tests/known-failures.json',
-  quarantineFile: 'tests/flaky.json',
+  quarantineFile: 'tests/quarantine.json',
   durationsFile: 'tests/durations.json',
+
+  // Longest a quarantine entry may be set to live (expires - added).
+  quarantineMaxDays: 60,
 
   // See docs/TESTING.md: the API suite gets flaky above two workers.
   workers: 2,

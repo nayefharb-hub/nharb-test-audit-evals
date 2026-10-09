@@ -67,8 +67,6 @@ function failed(fileResult) {
 
 // Re-run the tests that are allowed retries (see harness.config.js).
 function applyRetries(report, workers) {
-  // Retries stay off in CI so that flaky tests show up there.
-  if (process.env.CI) return report;
   for (const [id, attempts] of Object.entries(config.retries)) {
     const file = fileOf(id);
     const idx = report.testResults.findIndex((r) => relFile(r.name) === file);

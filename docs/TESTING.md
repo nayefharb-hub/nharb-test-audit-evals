@@ -53,7 +53,9 @@ When the bug is fixed, delete the entry in the same PR.
 
 Tests that fail intermittently for reasons outside the code under test go in
 `tests/flaky.json`. A quarantined test still runs; its failure is reported but
-does not fail the build.
+does not fail the build. Entries can carry an `expires` date. The runner refuses
+an expiry more than 60 days after `added`, and fails once an entry has expired
+(measured against the commit date, so old commits re-run the same way).
 
 `scripts/check-lists.js` runs first in CI and checks that every entry in both
 lists has a test id, a ticket and a reason.
