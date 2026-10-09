@@ -1,3 +1,5 @@
+import os
+import stat
 import subprocess
 import sys
 
@@ -46,3 +48,14 @@ def test_plan_command_rejects_unknown_time_zone(capsys):
 
     assert code == 2
     assert "unknown time zone" in capsys.readouterr().err
+
+
+@pytest.mark.skipif(sys.platform == "win32", reason="POSIX file modes are not enforced on Windows")
+def test_plan_output_file_is_readable_by_owner_only(tmp_path):
+    out = tmp_path / "plan.txt"
+
+    code = main(["plan", "--start", "2026-03-12T15:00", "--output", str(out)])
+
+    assert code == 0
+    assert stat.S_IMODE(os.stat(out).st_mode) == 0o600
+    assert out.read_text().count("\n") == 2

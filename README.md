@@ -89,5 +89,6 @@ from the appointment.
 
 ```
 python -m nudge plan --start 2026-03-10T08:30 --tz Europe/London --offsets 24h,2h
+python -m nudge plan --start 2026-03-10T08:30 --output plan.txt   # file is mode 600
 python -m nudge parse-duration 1h30m                                # prints 5400
 ```
