@@ -1,0 +1,24 @@
+{
+  "name": "shopkit",
+  "version": "0.4.0",
+  "description": "Small, framework-free helpers for the storefront: prices, dates, cart state, discount codes and product loading.",
+  "main": "src/index.js",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "<rootDir>/tests/**/*.test.js"
+    ]
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
