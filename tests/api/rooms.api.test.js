@@ -7,7 +7,7 @@ beforeAll(async () => { srv = await startServer(); });
 afterAll(() => srv.close());
 
 describe('GET /rooms', () => {
-  test('lists rooms sorted by capacity', async () => {
+  test('orders rooms by capacity, largest first', async () => {
     const res = await srv.get('/rooms');
     expect(res.status).toBe(200);
     expect(res.body.map((r) => r.id)).toEqual(['dune', 'atlas', 'birch', 'cedar']);

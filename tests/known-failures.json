@@ -6,7 +6,7 @@
     "added": "2026-09-15"
   },
   {
-    "test": "tests/api/bookings.test.js › PATCH /bookings/:id › rejects a reschedule longer than four hours",
+    "test": "tests/api/bookings.api.test.js › PATCH /bookings/:id › rejects a reschedule longer than four hours",
     "ticket": "BK-138",
     "reason": "rescheduleBooking does not apply the four hour maximum that createBooking enforces, so PATCH accepts a six hour booking.",
     "added": "2026-09-15"

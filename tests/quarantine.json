@@ -1,6 +1,6 @@
 [
   {
-    "test": "tests/api/bookings.test.js › POST /bookings › rejects bookings that start in the past",
+    "test": "tests/api/bookings.api.test.js › POST /bookings › rejects bookings that start in the past",
     "ticket": "BK-127",
     "reason": "Flaky on CI: depends on the runner clock and fails intermittently around midnight UTC.",
     "added": "2026-09-15"
