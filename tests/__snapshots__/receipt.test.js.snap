@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`buildReceipt mixed cart with a discount code and sales tax 1`] = `
+{
+  "discount": "-$23.95",
+  "discountCode": "FALL10",
+  "itemCount": 10,
+  "lines": [
+    {
+      "lineTotal": "$48.00",
+      "name": "Logo Tee (Black, M)",
+      "qty": 2,
+      "sku": "TEE-BLK-M",
+      "unitPrice": "$24.00",
+    },
+    {
+      "lineTotal": "$68.00",
+      "name": "Heavyweight Hoodie (Grey, L)",
+      "qty": 1,
+      "sku": "HD-GRY-L",
+      "unitPrice": "$68.00",
+    },
+    {
+      "lineTotal": "$43.50",
+      "name": "Enamel Mug",
+      "qty": 3,
+      "sku": "MUG-01",
+      "unitPrice": "$14.50",
+    },
+    {
+      "lineTotal": "$28.00",
+      "name": "Six-Panel Cap",
+      "qty": 1,
+      "sku": "CAP-NVY",
+      "unitPrice": "$28.00",
+    },
+    {
+      "lineTotal": "$32.00",
+      "name": "Crew Socks (3-pack)",
+      "qty": 2,
+      "sku": "SCK-3PK",
+      "unitPrice": "$16.00",
+    },
+    {
+      "lineTotal": "$19.99",
+      "name": "Canvas Tote",
+      "qty": 1,
+      "sku": "TOTE-NAT",
+      "unitPrice": "$19.99",
+    },
+  ],
+  "subtotal": "$239.49",
+  "tax": "$17.24",
+  "total": "$232.78",
+}
+`;
