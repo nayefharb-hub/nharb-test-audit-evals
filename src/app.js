@@ -5,7 +5,7 @@ const { createBooking, rescheduleBooking, cancelBooking, ValidationError } = req
 const { freeSlots } = require('./availability');
 const { quote } = require('./pricing');
 const { parseInstant, isDateString } = require('./time');
-const { bookingToICal } = require('./ical');
+const { bookingToICal } = require('./export/ical');
 
 function createApp({ store = createStore(), holidays = null, clock = () => new Date() } = {}) {
   const routes = [];
