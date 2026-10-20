@@ -1,0 +1,9 @@
+[
+  { "code": "WELCOME5", "kind": "fixed", "value": 500 },
+  { "code": "SAVE10", "kind": "percent", "value": 10, "minSubtotal": 5000 },
+  { "code": "FALL10", "kind": "percent", "value": 10, "expiresAt": "2026-11-30T23:59:59Z" },
+  { "code": "FREESHIP", "kind": "fixed", "value": 795, "minSubtotal": 3500 },
+  { "code": "SUMMER25", "kind": "percent", "value": 25, "expiresAt": "2026-08-31T23:59:59Z" },
+  { "code": "BFRIDAY2025", "kind": "percent", "value": 30, "expiresAt": "2025-12-01T07:59:59Z" },
+  { "code": "SPRING15", "kind": "percent", "value": 15, "minSubtotal": 4000, "expiresAt": "2026-05-31T23:59:59Z" }
+]
