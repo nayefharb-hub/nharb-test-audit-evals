@@ -4,11 +4,9 @@ from __future__ import annotations
 
 import logging
 import threading
-from concurrent.futures import ThreadPoolExecutor
 
 from nudge.clock import Clock
 from nudge.gateway import EmailGateway
-from nudge.models import Reminder
 from nudge.store import ReminderStore
 from nudge.templates import render_reminder
 
@@ -16,32 +14,25 @@ log = logging.getLogger(__name__)
 
 
 class Dispatcher:
-    def __init__(
-        self,
-        store: ReminderStore,
-        gateway: EmailGateway,
-        clock: Clock,
-        max_workers: int = 4,
-    ) -> None:
+    def __init__(self, store: ReminderStore, gateway: EmailGateway, clock: Clock) -> None:
         self.store = store
         self.gateway = gateway
         self.clock = clock
-        self.max_workers = max_workers
 
     def tick(self) -> int:
         """Send every reminder that is due now. Returns how many were sent."""
         due = self.store.due(self.clock.now())
-        if not due:
-            return 0
-        with ThreadPoolExecutor(max_workers=self.max_workers) as pool:
-            list(pool.map(self._deliver, due))
-        return len(due)
-
-    def _deliver(self, reminder: Reminder) -> None:
-        appt = self.store.get(reminder.appointment_id)
-        message = render_reminder(appt, reminder)
-        self.gateway.send(message)
-        self.store.mark_sent(reminder, message.message_id)
+        # Mark everything as sent before talking to the gateway, so a slow
+        # gateway can't let the next tick pick the same reminders up again.
+        outgoing = []
+        for reminder in due:
+            appt = self.store.get(reminder.appointment_id)
+            message = render_reminder(appt, reminder)
+            self.store.mark_sent(reminder, message.message_id)
+            outgoing.append(lambda: self.gateway.send(message))
+        for send in outgoing:
+            send()
+        return len(outgoing)
 
 
 class BackgroundRunner:
