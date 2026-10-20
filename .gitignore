@@ -1,0 +1,4 @@
+/throttled
+/bin/
+*.state
+*.tmp
