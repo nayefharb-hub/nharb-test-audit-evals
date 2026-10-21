@@ -1,0 +1,6 @@
+{
+  "listen": "127.0.0.1:9000",
+  "rate": 2.5,
+  "burst": 5,
+  "trust_proxy": true
+}

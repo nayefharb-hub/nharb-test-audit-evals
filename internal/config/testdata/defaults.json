@@ -1,0 +1,8 @@
+{
+  "listen": ":8080",
+  "rate": 10,
+  "burst": 20,
+  "trust_proxy": false,
+  "state_path": "throttled.state",
+  "flush_interval": "5s"
+}
