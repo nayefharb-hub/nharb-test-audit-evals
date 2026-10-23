@@ -47,6 +47,13 @@ cached per year.
 Room time is billed per started half hour at the room's hourly rate. Bookings
 shorter than an hour pay a €15 setup fee. Members get 10% off the room time.
 
+**Holds** (`POST /holds`)
+
+A hold reserves a slot for ten minutes while someone confirms. While it is
+active nobody else can book or hold that slot. Book with `holdId` to confirm
+it, or `DELETE /holds/:id` to let it go. Expired holds are released
+automatically.
+
 ## Other endpoints
 
 - `GET /health`
@@ -55,6 +62,4 @@ shorter than an hour pay a €15 setup fee. Members get 10% off the room time.
 
 ## Tests
 
-```sh
-npm test
-```
+See [docs/TESTING.md](docs/TESTING.md).

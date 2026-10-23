@@ -38,6 +38,7 @@ async function startServer(options = {}) {
     patch: (p, b) => request('PATCH', p, b),
     del: (p) => request('DELETE', p),
     close: () => new Promise((resolve) => {
+      app.holds.clear();
       server.closeAllConnections();
       server.close(resolve);
     }),

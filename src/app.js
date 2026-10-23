@@ -6,8 +6,10 @@ const { freeSlots } = require('./availability');
 const { quote } = require('./pricing');
 const { parseInstant, isDateString } = require('./time');
 const { bookingToICal } = require('./export/ical');
+const { createHoldManager } = require('./holds');
 
-function createApp({ store = createStore(), holidays = null, clock = () => new Date() } = {}) {
+function createApp({ store = createStore(), holidays = null, clock = () => new Date(), holdTtlMs } = {}) {
+  const holds = createHoldManager(store, { ttlMs: holdTtlMs });
   const routes = [];
   const route = (method, pattern, handler) => {
     const keys = [];
@@ -52,7 +54,8 @@ function createApp({ store = createStore(), holidays = null, clock = () => new D
   });
 
   route('POST', '/bookings', ({ body }) => {
-    const booking = createBooking(store, body, { now: clock() });
+    const booking = createBooking(store, body, { now: clock(), holds });
+    if (body.holdId) holds.release(body.holdId, 'confirmed');
     return { status: 201, body: booking };
   });
 
@@ -77,6 +80,27 @@ function createApp({ store = createStore(), holidays = null, clock = () => new D
     body: cancelBooking(store, params.id, { now: clock() }),
   }));
 
+  route('POST', '/holds', ({ body }) => {
+    const start = parseInstant(body.start);
+    const end = parseInstant(body.end);
+    if (!start || !end || end <= start) return { status: 400, body: { error: 'valid start and end are required' } };
+    store.bookingsForRoom(body.roomId).forEach((b) => {
+      if (start.getTime() < new Date(b.end).getTime() && new Date(b.start).getTime() < end.getTime()) {
+        throw new ValidationError(`room is already booked (${b.id})`, 409);
+      }
+    });
+    return { status: 201, body: holds.place(body.roomId, start, end, body.owner || 'anonymous') };
+  });
+
+  route('GET', '/holds/:id', ({ params }) => {
+    const hold = holds.get(params.id);
+    return hold ? { status: 200, body: hold } : notFound('hold');
+  });
+
+  route('DELETE', '/holds/:id', ({ params }) => (
+    holds.release(params.id, 'cancelled') ? { status: 204 } : notFound('hold')
+  ));
+
   async function handle(req, res) {
     const url = new URL(req.url, 'http://localhost');
     const match = routes
@@ -100,6 +124,7 @@ function createApp({ store = createStore(), holidays = null, clock = () => new D
     send(res, result);
   }
 
+  handle.holds = holds;
   handle.store = store;
   return handle;
 }

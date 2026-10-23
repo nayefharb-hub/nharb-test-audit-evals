@@ -38,7 +38,7 @@ function assertFree(store, roomId, range, ignoreId) {
   if (clash) throw new ValidationError(`room is already booked (${clash.id})`, 409);
 }
 
-function createBooking(store, input, { now } = {}) {
+function createBooking(store, input, { now, holds } = {}) {
   const room = store.getRoom(input.roomId);
   if (!room) throw new ValidationError('unknown room', 404);
   const { start, end, minutes } = checkTimes(input.start, input.end, now);
@@ -51,6 +51,7 @@ function createBooking(store, input, { now } = {}) {
 
   const range = { start: start.getTime(), end: end.getTime() };
   assertFree(store, room.id, range);
+  if (holds) holds.assertNotHeld(room.id, range, input.holdId);
 
   return store.saveBooking({
     id: store.nextId('bk'),
