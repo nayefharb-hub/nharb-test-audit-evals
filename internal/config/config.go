@@ -26,7 +26,7 @@ type Config struct {
 	// StatePath is where bucket state is persisted. Empty disables it.
 	StatePath string `json:"state_path"`
 	// FlushInterval is how often state is written to StatePath.
-	FlushInterval string `json:"flush_interval"`
+	FlushInterval Duration `json:"flush_interval"`
 }
 
 // Default returns the built-in configuration.
@@ -36,7 +36,7 @@ func Default() Config {
 		Rate:          10,
 		Burst:         20,
 		StatePath:     "throttled.state",
-		FlushInterval: "5s",
+		FlushInterval: Duration(5 * time.Second),
 	}
 }
 
@@ -91,12 +91,8 @@ func (c Config) Validate() error {
 	if c.Rate <= 0 {
 		return fmt.Errorf("config: rate must be positive, got %v", c.Rate)
 	}
-	d, err := time.ParseDuration(c.FlushInterval)
-	if err != nil {
-		return fmt.Errorf("config: flush_interval: %w", err)
-	}
-	if d < 0 {
-		return fmt.Errorf("config: flush_interval must not be negative, got %v", d)
+	if c.FlushInterval < 0 {
+		return fmt.Errorf("config: flush_interval must not be negative, got %v", c.FlushInterval)
 	}
 	return nil
 }

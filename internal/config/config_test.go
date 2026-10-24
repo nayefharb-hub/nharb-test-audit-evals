@@ -1,8 +1,10 @@
 package config
 
 import (
+	"os"
 	"path/filepath"
 	"testing"
+	"time"
 )
 
 func TestLoadFile(t *testing.T) {
@@ -40,6 +42,23 @@ func TestLoadEnvOverridesFile(t *testing.T) {
 	}
 }
 
+func TestLoadFlushInterval(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "c.json")
+	writeFile(t, path, `{"flush_interval": "1m30s"}`)
+	cfg, err := Load(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := time.Duration(cfg.FlushInterval), 90*time.Second; got != want {
+		t.Errorf("FlushInterval = %v, want %v", got, want)
+	}
+
+	writeFile(t, path, `{"flush_interval": 30}`)
+	if _, err := Load(path); err == nil {
+		t.Error("numeric flush_interval accepted")
+	}
+}
+
 func TestLoadErrors(t *testing.T) {
 	if _, err := Load(filepath.Join("testdata", "missing.json")); err == nil {
 		t.Error("Load of missing file succeeded")
@@ -74,7 +93,7 @@ func TestValidate(t *testing.T) {
 		{"zero rate", func(c *Config) { c.Rate = 0 }},
 		{"negative rate", func(c *Config) { c.Rate = -1 }},
 		{"zero burst", func(c *Config) { c.Burst = 0 }},
-		{"negative flush interval", func(c *Config) { c.FlushInterval = "-1s" }},
+		{"negative flush interval", func(c *Config) { c.FlushInterval = Duration(-time.Second) }},
 	}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
@@ -85,5 +104,12 @@ func TestValidate(t *testing.T) {
 				t.Errorf("Validate accepted %+v", cfg)
 			}
 		})
+	}
+}
+
+func writeFile(t *testing.T, path, data string) {
+	t.Helper()
+	if err := os.WriteFile(path, []byte(data), 0o644); err != nil {
+		t.Fatal(err)
 	}
 }
