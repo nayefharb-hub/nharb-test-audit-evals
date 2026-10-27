@@ -119,3 +119,27 @@ func (l *Limiter) refill(key string) *State {
 	}
 	return b
 }
+
+// Snapshot returns a copy of every bucket's state, brought up to date.
+func (l *Limiter) Snapshot() map[string]State {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	out := make(map[string]State, len(l.buckets))
+	for k := range l.buckets {
+		out[k] = *l.refill(k)
+	}
+	return out
+}
+
+// Restore replaces the limiter's state with s. Token counts above the burst
+// size are clamped.
+func (l *Limiter) Restore(s map[string]State) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	l.buckets = make(map[string]*State, len(s))
+	for k, v := range s {
+		v := v
+		v.Tokens = min(v.Tokens, l.burst)
+		l.buckets[k] = &v
+	}
+}
