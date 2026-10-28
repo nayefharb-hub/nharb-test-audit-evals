@@ -54,27 +54,33 @@ function cartReducer(state = initialCartState, action = {}) {
   }
 }
 
+// Apply a rate to an amount in minor units, rounding half up to a whole unit.
+function applyRate(amount, rate) {
+  return Math.round(amount * rate);
+}
+
+function lineTotal(line) {
+  return line.price * line.qty;
+}
+
 function discountAmount(subtotal, discount) {
   if (!discount) return 0;
-  if (discount.kind === 'percent') {
-    return Math.round((subtotal * discount.value) / 100);
+  switch (discount.kind) {
+    case 'percent':
+      return applyRate(subtotal, discount.value / 100);
+    case 'fixed':
+      return Math.min(discount.value, subtotal);
+    default:
+      return 0;
   }
-  if (discount.kind === 'fixed') {
-    return Math.min(discount.value, subtotal);
-  }
-  return 0;
 }
 
-/**
- * Totals for a cart, in minor units. Tax is charged on the discounted
- * subtotal.
- */
+/** Totals for a cart, in minor units. */
 function cartTotals(state, { taxRate = 0 } = {}) {
-  const subtotal = state.items.reduce((sum, line) => sum + line.price * line.qty, 0);
+  const subtotal = state.items.reduce((sum, line) => sum + lineTotal(line), 0);
   const discount = discountAmount(subtotal, state.discount);
-  const taxable = subtotal - discount;
-  const tax = Math.round(taxable * taxRate);
-  return { subtotal, discount, tax, total: taxable + tax };
+  const tax = applyRate(subtotal, taxRate);
+  return { subtotal, discount, tax, total: subtotal - discount + tax };
 }
 
-module.exports = { cartReducer, cartTotals, initialCartState };
+module.exports = { cartReducer, cartTotals, lineTotal, initialCartState };

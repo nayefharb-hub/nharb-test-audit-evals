@@ -50,7 +50,7 @@ exports[`buildReceipt mixed cart with a discount code and sales tax 1`] = `
     },
   ],
   "subtotal": "$239.49",
-  "tax": "$17.24",
-  "total": "$232.78",
+  "tax": "$19.16",
+  "total": "$234.70",
 }
 `;

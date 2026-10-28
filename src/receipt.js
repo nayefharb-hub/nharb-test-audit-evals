@@ -1,6 +1,6 @@
 'use strict';
 
-const { cartTotals } = require('./cart');
+const { cartTotals, lineTotal } = require('./cart');
 const { formatPrice } = require('./price');
 
 /**
@@ -17,7 +17,7 @@ function buildReceipt(state, { taxRate = 0, currency = 'USD', locale = 'en-US' }
       name: line.name,
       qty: line.qty,
       unitPrice: money(line.price),
-      lineTotal: money(line.price * line.qty),
+      lineTotal: money(lineTotal(line)),
     })),
     itemCount: state.items.reduce((sum, line) => sum + line.qty, 0),
     discountCode: state.discount ? state.discount.code : null,
