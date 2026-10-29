@@ -62,6 +62,25 @@ func TestRateLimitSeparatesClients(t *testing.T) {
 	}
 }
 
+func TestRateLimitRecoversAfterWait(t *testing.T) {
+	l := bucket.New(10, 2)
+	h := RateLimit(l, Options{}, ok)
+	request(h, "10.0.0.1:5000")
+	request(h, "10.0.0.1:5000")
+	if rec := request(h, "10.0.0.1:5000"); rec.Code != http.StatusTooManyRequests {
+		t.Fatalf("immediate retry got %d, want 429", rec.Code)
+	}
+
+	// At 10 tokens/s one token comes back after 100ms.
+	time.Sleep(110 * time.Millisecond)
+	if rec := request(h, "10.0.0.1:5000"); rec.Code != http.StatusOK {
+		t.Fatalf("after wait got %d, want 200", rec.Code)
+	}
+	if rec := request(h, "10.0.0.1:5000"); rec.Code != http.StatusTooManyRequests {
+		t.Errorf("second request after wait got %d, want 429", rec.Code)
+	}
+}
+
 // clientKey is unexported, but the X-Forwarded-For handling is easy to get
 // subtly wrong and awkward to reach through the handler, so it is tested
 // directly here.
