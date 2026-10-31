@@ -17,6 +17,8 @@ test('items are still there after a reload', async ({ page }) => {
 
 test('header says Saved once a change is stored', async ({ page }) => {
   await addTodos(page, 'Buy milk');
+  await expect(page.locator('.todo-count')).toHaveText('1 item left');
+  await expect(page.getByRole('status')).toHaveText('Saving…');
   await page.waitForResponse((res) => res.url().includes('/api/lists/') && res.request().method() === 'PUT');
 
   expect(await page.getByRole('status').textContent()).toBe('Saved');
