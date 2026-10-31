@@ -2,7 +2,7 @@ from decimal import Decimal
 
 import pytest
 
-from unitconv import convert, get_unit, units_for
+from unitconv import convert, get_unit, register_unit, units_for
 
 
 def test_kilometres_to_metres():
@@ -31,6 +31,11 @@ def test_float_input_is_read_as_written():
 
 def test_aliases_resolve_to_same_unit():
     assert convert(3, "feet", "yard") == convert(3, "ft", "yd") == Decimal("1")
+
+
+def test_register_custom_length_unit():
+    register_unit("furlong", "length", "201.168", aliases=("furlongs",))
+    assert convert(8, "furlongs", "mi") == Decimal("1")
 
 
 @pytest.mark.parametrize("unit", units_for("length"))

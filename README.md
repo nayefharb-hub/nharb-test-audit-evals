@@ -26,6 +26,20 @@ aliases. Temperature scales also accept `kelvin`, `celsius`, `fahrenheit`,
 Temperatures are converted as absolute readings (20 C is 68 F), not as
 differences.
 
+### Custom units
+
+Register extra units at import time of your application:
+
+```python
+>>> from unitconv import register_unit, convert
+>>> furlong = register_unit("furlong", "length", "201.168", aliases=("furlongs",))
+>>> convert(8, "furlong", "mi")
+Decimal('1.0000')
+```
+
+Registered units are global to the process and are available to
+`convert()`, `convert_fast()` and the parser alike.
+
 ## Behaviour
 
 - `convert(value, from_unit, to_unit, places=4)` returns a `Decimal`.

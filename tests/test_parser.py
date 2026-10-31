@@ -17,6 +17,10 @@ def test_evaluate_converts_parsed_request():
     assert evaluate("100 C to F") == Decimal("212")
 
 
+def test_evaluate_uses_registered_units():
+    assert evaluate("2 furlong to m") == Decimal("402.336")
+
+
 def test_parse_rejects_missing_to_keyword():
     with pytest.raises(ParseError) as excinfo:
         parse("5 km mi")
