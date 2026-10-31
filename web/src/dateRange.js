@@ -8,8 +8,14 @@ function parseDate(iso) {
   return new Date(y, m - 1, d);
 }
 
+function toUtcDay(iso) {
+  const [y, m, d] = iso.split('-').map(Number);
+  return Date.UTC(y, m - 1, d);
+}
+
+// Count in UTC so a 23- or 25-hour day around a clock change still counts as one night.
 function nightsBetween(checkIn, checkOut) {
-  return Math.floor((parseDate(checkOut) - parseDate(checkIn)) / DAY_MS);
+  return Math.round((toUtcDay(checkOut) - toUtcDay(checkIn)) / DAY_MS);
 }
 
 function validateRange({ checkIn, checkOut }, today) {
