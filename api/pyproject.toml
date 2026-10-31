@@ -13,3 +13,7 @@ test = ["pytest>=8"]
 
 [tool.setuptools]
 packages = ["booking"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "contracts"]
+addopts = "-ra"
