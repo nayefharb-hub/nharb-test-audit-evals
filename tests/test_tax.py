@@ -44,3 +44,15 @@ def test_total_without_discount():
     invoice = make_invoice()
     invoice.add_item("Design work", 4, "62.50", "0.20")
     assert invoice.total == Decimal("300.00")
+
+
+def test_reference_invoice_total():
+    # Worked example from the README.
+    invoice = make_invoice(discount_pct="5")
+    invoice.add_item("Website redesign", 1, "1000.00", "0.20")
+    invoice.add_item("Hosting (12 months)", 12, "15.99", "0.20")
+    invoice.add_item("Training workshop", 2, "87.50", "0.07")
+    assert invoice.subtotal == Decimal("1366.88")
+    assert invoice.discount == Decimal("68.34")
+    assert invoice.tax_total == Decimal("238.10")
+    assert invoice.total == Decimal("1536.64")
