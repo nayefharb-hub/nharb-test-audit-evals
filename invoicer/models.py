@@ -4,7 +4,9 @@ from dataclasses import dataclass, field
 from datetime import date
 from decimal import Decimal
 
+from invoicer import dates
 from invoicer.money import round_money, to_decimal
+from invoicer.tax import invoice_tax
 
 
 def _require_positive(value: Decimal) -> Decimal:
@@ -64,3 +66,15 @@ class Invoice:
     @property
     def discount(self) -> Decimal:
         return round_money(self.subtotal * self.discount_pct / 100)
+
+    @property
+    def tax_total(self) -> Decimal:
+        return invoice_tax(self)
+
+    @property
+    def total(self) -> Decimal:
+        return self.subtotal - self.discount + self.tax_total
+
+    @property
+    def due_date(self) -> date:
+        return dates.due_date(self.issue_date, self.terms_days)
