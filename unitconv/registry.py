@@ -5,6 +5,7 @@ that converts a value in that unit to the dimension's base unit.
 """
 
 from dataclasses import dataclass
+from decimal import Decimal
 
 
 class UnknownUnitError(KeyError):
@@ -19,7 +20,7 @@ class IncompatibleUnitsError(ValueError):
 class Unit:
     name: str
     dimension: str
-    factor: float
+    factor: Decimal
 
 
 _UNITS = {}
@@ -27,7 +28,7 @@ _ALIASES = {}
 
 
 def register_unit(name, dimension, factor, aliases=()):
-    unit = Unit(name, dimension, factor)
+    unit = Unit(name, dimension, Decimal(str(factor)))
     _UNITS[name] = unit
     for alias in aliases:
         _ALIASES[alias] = name
