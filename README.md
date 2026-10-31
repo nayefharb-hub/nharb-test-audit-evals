@@ -51,7 +51,8 @@ Request(value=Decimal('98.6'), from_unit='F', to_unit='C')
 
 The accepted form is `<number> <unit> to <unit>` (`in` works in place of
 `to`). Whitespace between the number and the unit is optional, so `5km to mi`
-is fine. Anything else raises `ParseError`.
+is fine. Degree signs are understood: `°C`, `°F`, `℃` and `℉` all work.
+Anything else raises `ParseError`.
 
 ## Development
 

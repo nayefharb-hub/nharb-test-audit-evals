@@ -21,3 +21,7 @@ def test_parse_rejects_missing_to_keyword():
     with pytest.raises(ParseError) as excinfo:
         parse("5 km mi")
         assert "missing 'to'" in str(excinfo.value)
+
+
+def test_gh42_parser_accepts_unicode_degree_sign():
+    assert parse("20 °C to ℉") == Request(Decimal("20"), "C", "F")

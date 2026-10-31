@@ -20,6 +20,18 @@ _REQUEST = re.compile(
 )
 
 
+# Temperature units are often written with a degree sign, either as a
+# separate character ("°C") or as a single code point ("℃").
+_DEGREE_FORMS = {"℃": "C", "℉": "F"}
+
+
+def _normalise_unit(token):
+    token = _DEGREE_FORMS.get(token, token)
+    if token.startswith("°") and len(token) > 1:
+        token = token[1:]
+    return token
+
+
 class ParseError(ValueError):
     """Raised when a conversion request cannot be understood."""
 
@@ -38,8 +50,8 @@ def parse(text):
         raise ParseError(f"expected '<number> <unit> to <unit>', got {text!r}")
     return Request(
         value=Decimal(match["value"]),
-        from_unit=match["src"],
-        to_unit=match["dst"],
+        from_unit=_normalise_unit(match["src"]),
+        to_unit=_normalise_unit(match["dst"]),
     )
 
 
