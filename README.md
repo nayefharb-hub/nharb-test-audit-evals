@@ -63,3 +63,18 @@ server.js     static files + the in-memory list API
 | ------ | ----------------- | --------------------------------------- |
 | GET    | `/api/lists/:id`  | `{ rev, todos: [{ id, title, completed }] }` |
 | PUT    | `/api/lists/:id`  | same shape; writes with an older `rev` are ignored |
+
+## Tests
+
+End-to-end tests live in `tests/` and run with Playwright against Chromium.
+Playwright starts the server itself.
+
+```sh
+npm ci
+npx playwright install chromium   # first time only
+npm test
+```
+
+`npx playwright test --ui` is handy while writing tests. CI runs the same suite
+on every pull request (see `.github/workflows/e2e.yml`) and keeps the HTML
+report as a build artifact.

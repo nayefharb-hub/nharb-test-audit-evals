@@ -6,10 +6,13 @@ const PORT = Number(process.env.PORT) || 4173;
 module.exports = defineConfig({
   testDir: './tests',
   fullyParallel: false,
-  reporter: 'list',
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? 2 : undefined,
+  reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : 'list',
   use: {
     baseURL: `http://localhost:${PORT}`,
-    trace: 'retain-on-failure',
+    trace: 'on-first-retry',
   },
   projects: [
     {
@@ -21,7 +24,7 @@ module.exports = defineConfig({
   webServer: {
     command: 'node server.js',
     url: `http://localhost:${PORT}`,
-    reuseExistingServer: true,
+    reuseExistingServer: !process.env.CI,
     env: { PORT: String(PORT) },
   },
 });
