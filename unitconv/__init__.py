@@ -2,6 +2,7 @@
 
 from . import length, mass, temperature  # noqa: F401  (registers the built-in units)
 from .convert import DEFAULT_PLACES, convert
+from .parser import ParseError, Request, evaluate, parse
 from .registry import (
     IncompatibleUnitsError,
     UnknownUnitError,
@@ -13,9 +14,13 @@ from .registry import (
 __all__ = [
     "DEFAULT_PLACES",
     "IncompatibleUnitsError",
+    "ParseError",
+    "Request",
     "UnknownUnitError",
     "convert",
+    "evaluate",
     "get_unit",
+    "parse",
     "register_unit",
     "units_for",
 ]

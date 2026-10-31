@@ -37,6 +37,22 @@ differences.
 - Converting between dimensions raises `IncompatibleUnitsError`.
 - Unknown unit names raise `UnknownUnitError` (a `KeyError`).
 
+## Parsing text
+
+`evaluate()` takes a request written as text and converts it:
+
+```python
+>>> from unitconv import evaluate, parse
+>>> evaluate("10 ft to m")
+Decimal('3.0480')
+>>> parse("98.6 F in C")
+Request(value=Decimal('98.6'), from_unit='F', to_unit='C')
+```
+
+The accepted form is `<number> <unit> to <unit>` (`in` works in place of
+`to`). Whitespace between the number and the unit is optional, so `5km to mi`
+is fine. Anything else raises `ParseError`.
+
 ## Development
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).
