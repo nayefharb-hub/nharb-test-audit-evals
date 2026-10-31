@@ -1,7 +1,7 @@
 # unitconv
 
 A small, dependency-free Python library for converting between units of
-length and mass.
+length, mass and temperature.
 
 ```python
 >>> from unitconv import convert
@@ -17,9 +17,14 @@ Decimal('42.1648')
 |-----------|------|-------|
 | length    | m    | `m`, `km`, `cm`, `mm`, `in`, `ft`, `yd`, `mi` |
 | mass      | kg   | `kg`, `g`, `mg`, `t`, `lb`, `oz`, `st` |
+| temperature | K  | `K`, `C`, `F` |
 
 Common spelled-out names (`metre`, `feet`, `pounds`, ...) are accepted as
-aliases.
+aliases. Temperature scales also accept `kelvin`, `celsius`, `fahrenheit`,
+`degC` and `degF`.
+
+Temperatures are converted as absolute readings (20 C is 68 F), not as
+differences.
 
 ## Behaviour
 

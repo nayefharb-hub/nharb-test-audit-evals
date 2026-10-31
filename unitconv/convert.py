@@ -27,6 +27,6 @@ def convert(value, from_unit, to_unit, places=DEFAULT_PLACES):
         raise IncompatibleUnitsError(
             f"cannot convert {src.dimension} ({src.name}) to {dst.dimension} ({dst.name})"
         )
-    base = _to_decimal(value) * src.factor
+    base = src.to_base(_to_decimal(value))
     quantum = Decimal(1).scaleb(-places)
-    return (base / dst.factor).quantize(quantum, rounding=ROUND_DOWN)
+    return dst.from_base(base).quantize(quantum, rounding=ROUND_DOWN)

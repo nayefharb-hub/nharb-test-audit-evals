@@ -1,6 +1,6 @@
-"""unitconv: convert between units of length and mass."""
+"""unitconv: convert between units of length, mass and temperature."""
 
-from . import length, mass  # noqa: F401  (registers the built-in units)
+from . import length, mass, temperature  # noqa: F401  (registers the built-in units)
 from .convert import DEFAULT_PLACES, convert
 from .registry import (
     IncompatibleUnitsError,
