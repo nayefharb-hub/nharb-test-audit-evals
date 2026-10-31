@@ -2,7 +2,7 @@
 
 const { parseDate, nightsBetween } = require('./dateRange');
 
-const WEEKEND_SURCHARGE = 0.2;
+const WEEKEND_SURCHARGE = 0.15;
 
 function isWeekendNight(date) {
   const day = date.getDay();
