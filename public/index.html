@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tally</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="app-header">
+        <h1>Tally</h1>
+        <p id="save-status" class="save-status" role="status" aria-live="polite"></p>
+      </header>
+
+      <form id="new-todo-form" autocomplete="off">
+        <label for="new-todo" class="visually-hidden">New to-do</label>
+        <input id="new-todo" name="title" placeholder="What needs doing?" autofocus />
+      </form>
+
+      <p id="form-error" class="form-error" hidden></p>
+
+      <ul id="todo-list" class="todo-list" aria-label="To-do items"></ul>
+
+      <footer id="list-footer" class="list-footer" hidden>
+        <span id="todo-count" class="todo-count"></span>
+        <nav class="filters" aria-label="Filter items">
+          <a href="#/" data-filter="all">All</a>
+          <a href="#/active" data-filter="active">Active</a>
+          <a href="#/completed" data-filter="completed">Completed</a>
+        </nav>
+        <button id="clear-completed" type="button" class="clear-completed">Clear completed</button>
+      </footer>
+
+      <p class="share">
+        Share this list: <a id="share-link" href="#"></a>
+      </p>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>
