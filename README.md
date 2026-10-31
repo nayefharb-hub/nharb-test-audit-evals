@@ -37,6 +37,14 @@ differences.
 - Converting between dimensions raises `IncompatibleUnitsError`.
 - Unknown unit names raise `UnknownUnitError` (a `KeyError`).
 
+### Bulk conversions
+
+`convert_fast(value, from_unit, to_unit)` does the same conversion in plain
+`float` arithmetic and returns a `float`. It does no rounding, so results
+carry the usual binary floating-point error (`convert_fast(100, "F", "C")`
+is `37.77777777777783`). Use it for large batches where speed matters more
+than the last digit.
+
 ## Parsing text
 
 `evaluate()` takes a request written as text and converts it:

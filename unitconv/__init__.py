@@ -1,7 +1,7 @@
 """unitconv: convert between units of length, mass and temperature."""
 
 from . import length, mass, temperature  # noqa: F401  (registers the built-in units)
-from .convert import DEFAULT_PLACES, convert
+from .convert import DEFAULT_PLACES, convert, convert_fast
 from .parser import ParseError, Request, evaluate, parse
 from .registry import (
     IncompatibleUnitsError,
@@ -18,6 +18,7 @@ __all__ = [
     "Request",
     "UnknownUnitError",
     "convert",
+    "convert_fast",
     "evaluate",
     "get_unit",
     "parse",
